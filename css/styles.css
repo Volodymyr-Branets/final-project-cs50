@@ -1,0 +1,23 @@
+/* First image whith child style */
+#img-child {
+    border-radius: 10px;
+}
+
+#instagram {
+    max-width: 25px;
+    text-decoration: none;
+}
+
+#facebook {
+    max-width: 25px;
+    text-decoration: none;
+}
+
+.cards-img{
+    max-width: 150px;
+}
+
+/* .img-carusel {
+    max-height: 700px;
+    justify-content: center;
+} */
