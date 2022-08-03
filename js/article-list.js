@@ -15,7 +15,7 @@ class ArticleList {
     }
     createArticleDomString(article) {
         return `
-                <div class="col">
+                <div class="col text-dark">
                     <div class="card shadow-sm">
                         <img src="img/${article.img}" class="bd-placeholder-img card-img-top article-img" alt="${article.title}">
                         <div class="card-body">
@@ -38,7 +38,6 @@ class ArticleList {
         modal.querySelector('.modal-title').innerHTML = article.title;
         modal.querySelector('.product-image').src = `img/${article.img}`;
         modal.querySelector('.product-description').innerHTML = article.text;
-        modal.querySelector('.btn-buy').dataset.id = article.id;
     }
 }
 new ArticleList();
