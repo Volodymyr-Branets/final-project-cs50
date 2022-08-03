@@ -56,6 +56,12 @@ class ProductList {
         const id = event.target.dataset.id;
         const cart = new Cart();
         cart.addProduct(id);
+        window.showAlert("Thanks! Now you can go to the cart.");
     }
+    // hideProductInfo(event) {
+    //     const id = event.target.dataset.id;
+    //     const modal = document.querySelector('#product-info-modal');
+    //     modal.
+    // }
 }
 new ProductList();
