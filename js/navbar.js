@@ -16,7 +16,7 @@ let navbar = `
                             <a href="index.html" class="nav-link">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a href="products.html" class="nav-link">Some products</a>
+                            <a href="products.html" class="nav-link">Products</a>
                         </li>
                         <li class="nav-item">
                             <a href="about.html" class="nav-link">About Us</a>
