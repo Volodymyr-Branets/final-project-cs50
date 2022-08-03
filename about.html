@@ -17,38 +17,8 @@
 </head>
 
 <body class="bg-dark">
-    <!-- Header -->
-    <header id="head">
-        <!-- Navigation Bar -->
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark py-3">
-            <div class="container">
-                <!-- Logo -->
-                <a href="index.html" class="navbar-brand text-warning"><span class="material-symbols-outlined">
-                        local_mall
-                    </span> ijuice store</a>
-                <!-- Hamburger menu -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu"><span
-                        class="navbar-toggler-icon"></span></button>
-                <!-- Menu List -->
-                <div class="collapse navbar-collapse" id="navmenu">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a href="index.html" class="nav-link">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="products.html" class="nav-link">Some products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="about.html" class="nav-link">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="contacts.html" class="nav-link">Contacts</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <!-- Header and navbar -->
+    <header id="head"></header>
     <!-- Main section -->
     <main class="bg-dark text-light">
         <section class="text-center text-lg-start">
@@ -94,11 +64,51 @@
         </section>
     </footer>
 
+    <!-- Modal Cart -->
+    <div class="modal fade" id="modal-cart" tabindex="-1" aria-labelledby="product-info-modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartLabel">Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="cart-product-list-container cart-container"></div>
+                    <hr>
+                    <div class="container">
+                        <form class="form-contacts">
+                            <div class="form-group row">
+                                <label for="client-name" class="col-4 col-form-label">Your name:</label>
+                                <input class="form-control col-8" type="text" id="client-name" name="name" required>
+                            </div>
+                            <div class="form-group row">
+                                <label for="client-email" class="col-4 col-form-label">Your email:</label>
+                                <input class="form-control col-8" type="email" id="client-email" name="email" required>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary order">Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Add Bootstrap JS -->
+    <!-- Link Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
         crossorigin="anonymous"></script>
+
+    <!-- Script Section -->
+    <script src="js/navbar.js"></script>
+    <script src="js/alert.js"></script>
+    <script src="js/products-service.js"></script>
+    <script src="js/product-list-home.js"></script>
+    <script src="js/article-service.js"></script>
+    <script src="js/article-list.js"></script>
+    <script src="js/cart.js"></script>
 </body>
 
 </html>
