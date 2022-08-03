@@ -5,39 +5,37 @@ class Cart {
     this.container = document.querySelector('.cart-container');
     this.productsService = new ProductsService();
     this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
+    console.log(this.cart);
     this.addEventListeners();
     this.updateBadge();
     this.renderCart();
     return Cart._instance;
   }
-  // Function for listen
-  addEventListeners() {
-    document.querySelector('.cart').addEventListener('click', this.renderCart.bind(this));
-    document.querySelector('.order').addEventListener('click', this.order.bind(this));
-  }
-  // Function for save our cart at local storage
-  saveCart() {
-      localStorage.setItem('cart', JSON.stringify(this.cart));
-  }
   // Rendering cart
   async renderCart() {
+    
+    let total = 0;
+    // Render header
     let cartDomString = `
         <div class="row">
             <div class="col-5"><strong>Product</strong></div>
             <div class="col-3"><strong>Price</strong></div>
             <div class="col-2"><strong>Quantity</strong></div>
-        </div>`;
-    let total = 0;
+        </div>
+        <hr/>`;
+    // Render product list in cart
     for (const productId in this.cart) {
       const product = await this.productsService.getProductById(productId);
       cartDomString += this.createCartProductDomString(product);
-      total += product.price * this.cart[productId];
+      total += await product.price * await this.cart[productId];
     }
+    // Render footer total
     cartDomString += `
     <div class="row">
         <div class="col-5"><strong>TOTAL</strong></div>
         <div class="col-3"><strong>$${total.toFixed(2)}</strong></div>
     </div>`;
+    
     this.container.innerHTML = cartDomString;
     this.container
         .querySelectorAll(".plus")
@@ -54,6 +52,32 @@ class Cart {
             )
     );
   }
+  // Function for listen
+  addEventListeners() {
+    document.querySelector('.cart').addEventListener('click', this.renderCart.bind(this));
+    document.querySelector('.order').addEventListener('click', this.order.bind(this));
+  }
+  // Update badge
+  updateBadge() {
+      document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
+  }
+  // Function for save our cart at local storage
+  saveCart() {
+      localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+
+  // Make product row in cart
+  createCartProductDomString(product) {
+      return `
+          <div class="row" data-id="${product.id}">
+              <div class="col-5">${product.title}</div>
+              <div class="col-3">${product.price}</div>
+              <div class="col-2">${this.cart[product.id]}</div>
+              <div class="col-1"><button data-id=${product.id} class="btn btn-sm plus">+</button></div>
+              <div class="col-1"><button data-id=${product.id} class="btn btn-sm minus">-</button></div>
+          </div>
+          <hr/>`;
+  }
   // Change quantity of cart item (increment or decrement)
   changeQuantity(ev, operation) {
       const id = ev.target.dataset.id;
@@ -61,7 +85,7 @@ class Cart {
       this.renderCart();
   }
   addProduct(id) {
-      this.cart[id] = (this.cart[id] || 0) + 1;
+    this.cart[id] = (this.cart[id] || 0) + 1;
       this.saveCart();
       this.updateBadge();
   }
@@ -73,21 +97,6 @@ class Cart {
       }
       this.saveCart();
       this.updateBadge();
-  }
-  // Make product row in cart
-  createCartProductDomString(product) {
-      return `
-          <div class="row" data-id="${product.id}">
-              <div class="col-5">${product.title}</div>
-              <div class="col-3">${product.price}</div>
-              <div class="col-2">${this.cart[product.id]}</div>
-              <div class="col-1"><button data-id=${product.id} class="btn btn-sm plus">+</button></div>
-              <div class="col-1"><button data-id=${product.id} class="btn btn-sm minus">-</button></div>
-          </div>`;
-  }
-  // Update badge
-  updateBadge() {
-      document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
   }
   // Make order
   async order(ev) {

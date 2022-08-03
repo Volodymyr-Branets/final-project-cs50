@@ -8,6 +8,11 @@
     text-decoration: none;
 }
 
+.article-img {
+    height: 250px;
+    object-fit: cover;
+}
+
 /* .img-carusel {
     max-height: 700px;
     justify-content: center;
