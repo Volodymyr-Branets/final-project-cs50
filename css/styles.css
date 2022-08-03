@@ -12,3 +12,9 @@
     height: 250px;
     object-fit: cover;
 }
+
+.carousel-img img{
+    width: 100%;
+    object-fit: cover;
+    max-height: 500px;
+}

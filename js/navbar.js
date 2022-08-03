@@ -4,7 +4,7 @@ let navbar = `
         <nav class="navbar navbar-expand-md bg-dark navbar-dark py-3">
             <div class="container">
                 <a href="index.html" class="navbar-brand text-warning logo"><span class="material-symbols-outlined">
-                        local_mall
+                        <i class="ri-headphone-fill ri-sm"></i>
                     </span> SmartStore</a>
                 <!-- Hamburger menu -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu"><span
@@ -26,8 +26,7 @@ let navbar = `
                         </li>
                     </ul>
                     <a class="nav-item cart text-warning align-content-center" data-bs-toggle="modal"
-                        data-bs-target="#modal-cart"><span
-                            class="material-symbols-outlined">shopping_cart_checkout</span><span
+                        data-bs-target="#modal-cart"><i class="ri-shopping-cart-line ri-lg m-1"></i><span
                             class="badge border border-warning cart-badge"></span></a>
                 </div>
             </div>
