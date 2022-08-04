@@ -3,6 +3,7 @@ const head = document.querySelector('#head');
 let navbar = `
         <nav class="navbar navbar-expand-md bg-dark navbar-dark py-3">
             <div class="container">
+                <!-- Logo & Icon -->            
                 <a href="index.html" class="navbar-brand text-warning logo"><span class="material-symbols-outlined">
                         <i class="ri-headphone-fill ri-sm"></i>
                     </span> SmartStore</a>
