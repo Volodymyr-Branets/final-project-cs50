@@ -1,20 +1,32 @@
-#instagram {
-    max-width: 25px;
-    text-decoration: none;
-}
-
-#facebook {
-    max-width: 25px;
-    text-decoration: none;
-}
-
+/* Image style in article card */
 .article-img {
     height: 250px;
     object-fit: cover;
 }
-
+/* Carousel on product page */
 .carousel-img img{
     width: 100%;
     object-fit: cover;
     max-height: 500px;
+}
+@media (max-width: 992px) {
+    .carousel-img img {
+            width: 100%;
+            object-fit: cover;
+            max-height: 350px;
+        }
+}
+@media (max-width: 768px) {
+    .carousel-img img {
+        width: 100%;
+        object-fit: cover;
+        max-height: 280px;
+    }
+}
+@media (max-width: 576px) {
+    .carousel-img img {
+        width: 100%;
+        object-fit: cover;
+        max-height: 200px;
+    }
 }
