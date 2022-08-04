@@ -29,16 +29,16 @@ class ProductList {
                     <div class="card-body">
                         <h5 class="card-title">${product.title}</h5>
                         <p class="card-text">${product.description}</p>
-                        <a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#product-info-modal" data-id=${product.id}>Info</a>
-                        <a href="#" class="btn btn-primary btn-buy" data-id=${product.id}> ${product.price} Buy</a>
+                        <a href="#" id="btn-info" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#product-info-modal" data-id=${product.id}>Info</a>
+                        <a href="#" id="btn-buy" class="btn btn-warning btn-buy" data-id=${product.id}> $${product.price} Buy</a>
                     </div>
                 </article>`;
     }
     addEventListeners() {
-        document.querySelectorAll('.btn-info').forEach(btn => {
+        document.querySelectorAll('#btn-info').forEach(btn => {
             btn.addEventListener('click', this.showProductInfo.bind(this));
         });
-        document.querySelectorAll('.btn-buy').forEach(btn => {
+        document.querySelectorAll('#btn-buy').forEach(btn => {
             btn.addEventListener('click', this.addProductToCart.bind(this));
         });
     }
@@ -49,7 +49,7 @@ class ProductList {
         modal.querySelector('.modal-title').innerHTML = product.title;
         modal.querySelector('.product-image').src = `img/${product.image}`;
         modal.querySelector('.product-description').innerHTML = product.description;
-        modal.querySelector('.product-price').innerHTML = product.price;
+        modal.querySelector('.product-price').innerHTML = `$${ product.price }`;
         modal.querySelector('.btn-buy').dataset.id = product.id;
     }
     addProductToCart(event) {
