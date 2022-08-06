@@ -50,12 +50,13 @@ class ProductList {
         modal.querySelector('.product-image').src = `img/${product.image}`;
         modal.querySelector('.product-description').innerHTML = product.description;
         modal.querySelector('.product-price').innerHTML = `$${ product.price }`;
-        modal.querySelector('.btn-buy').dataset.id = product.id;
+        modal.querySelector('#btn-buy').dataset.id = product.id;
     }
     addProductToCart(event) {
         const id = event.target.dataset.id;
         const cart = new Cart();
         cart.addProduct(id);
+        cart.updateCart();
         window.showAlert("Thanks! Now you can go to the cart.");
     }
     // hideProductInfo(event) {

@@ -11,9 +11,23 @@ class Cart {
     this.renderCart();
     return Cart._instance;
   }
+  // Function for listen
+  addEventListeners() {
+    document.querySelector('.cart').addEventListener('click', this.renderCart.bind(this));
+    document.querySelector('.order').addEventListener('click', this.order.bind(this));
+  }
+  // Function for save our cart at local storage
+  saveCart() {
+      //update this.card
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+  // Update badge
+  updateBadge() {
+      document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
+  }
   // Rendering cart
   async renderCart() {
-    
+    this.updateCart();
     let total = 0;
     // Render header
     let cartDomString = `
@@ -52,20 +66,6 @@ class Cart {
             )
     );
   }
-  // Function for listen
-  addEventListeners() {
-    document.querySelector('.cart').addEventListener('click', this.renderCart.bind(this));
-    document.querySelector('.order').addEventListener('click', this.order.bind(this));
-  }
-  // Update badge
-  updateBadge() {
-      document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
-  }
-  // Function for save our cart at local storage
-  saveCart() {
-      localStorage.setItem('cart', JSON.stringify(this.cart));
-  }
-
   // Make product row in cart
   createCartProductDomString(product) {
       return `
@@ -86,8 +86,9 @@ class Cart {
   }
   addProduct(id) {
     this.cart[id] = (this.cart[id] || 0) + 1;
-      this.saveCart();
-      this.updateBadge();
+    this.saveCart();
+    this.updateBadge();
+    this.updateCart();
   }
   deleteProduct(id) {
       if (this.cart[id] > 1) {
@@ -97,6 +98,10 @@ class Cart {
       }
       this.saveCart();
       this.updateBadge();
+  }
+  // Updating cart from existing storage
+  updateCart() {
+    this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
   }
   // Make order
   async order(ev) {
