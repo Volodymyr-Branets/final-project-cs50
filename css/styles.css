@@ -1,5 +1,6 @@
 /* Image style in article card */
 .article-img {
+    width:auto;
     height: 250px;
     object-fit: cover;
 }
