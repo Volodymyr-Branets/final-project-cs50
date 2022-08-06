@@ -40,7 +40,7 @@ class ProductList {
         modal.querySelector('.product-image').src = `img/${product.image}`;
         modal.querySelector('.product-description').innerHTML = product.description;
         modal.querySelector('.product-price').innerHTML = `$${ product.price }`;
-        modal.querySelector('.btn-buy').dataset.id = product.id;
+        modal.querySelector('#btn-buy').dataset.id = product.id;
     }
     addProductToCart(event) {
         const id = event.target.dataset.id;
