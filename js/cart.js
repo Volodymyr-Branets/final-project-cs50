@@ -35,8 +35,8 @@ class Cart {
     // Render product list in cart
     for (const id in this.cart) {
       const product = await this.productsService.getProductById(id);
+      total += product.price * this.cart[id];
       cartDomString += this.createCartProductDomString(product);
-      total += (await product.price) * (await this.cart[id]);
     }
     // Render footer total
     cartDomString += `
@@ -79,7 +79,6 @@ class Cart {
   }
   // Make product row in cart
   createCartProductDomString(product) {
-    this.updateCart();
     return `
         <div class="row" data-id="${product.id}">
             <div class="col-5">${product.title}</div>
