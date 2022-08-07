@@ -6,7 +6,6 @@
         "description": "Apple iPhone SE 2020<br>NEW, 128gb",
         "price": 419
     },
-
     {
         "id": "2",
         "title": "Apple iPhone X",
@@ -14,7 +13,6 @@
         "description": "Apple iPhone X<br>NEW, 256gb",
         "price": 439
     },
-
     {
         "id": "3",
         "title": "Apple iPhone XR",
@@ -22,7 +20,6 @@
         "description": "Apple iPhone XR<br>NEW, 64gb",
         "price": 435
     },
-
     {
         "id": "4",
         "title": "Apple iPhone XS",
@@ -30,7 +27,6 @@
         "description": "Apple iPhone XS<br>NEW, 64gb",
         "price": 435
     },
-
     {
         "id": "5",
         "title": "Apple iPhone 11",
@@ -38,7 +34,6 @@
         "description": "Apple iPhone 11<br>NEW, 64gb",
         "price": 519
     },
-
     {
         "id": "6",
         "title": "Apple iPhone 11 Pro",
@@ -46,7 +41,6 @@
         "description": "Apple iPhone 11 Pro<br>NEW, 64gb",
         "price": 619
     },
-
     {
         "id": "7",
         "title": "Apple iPhone 12 mini",
@@ -54,7 +48,6 @@
         "description": "Apple iPhone 12 mini<br>NEW, 64gb",
         "price": 599
     },
-
     {
         "id": "8",
         "title": "Apple iPhone 13",
@@ -62,7 +55,6 @@
         "description": "Apple iPhone 13<br>NEW, 128gb",
         "price": 849
     },
-
     {
         "id": "9",
         "title": "Apple iPhone 13 Pro",

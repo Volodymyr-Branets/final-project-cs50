@@ -1,5 +1,4 @@
 class Cart {
-  // Create constructor
   constructor() {
     if (!Cart._instance) Cart._instance = this;
     this.container = document.querySelector('.cart-container');
@@ -15,14 +14,6 @@ class Cart {
     document.querySelector('.cart').addEventListener('click', this.renderCart.bind(this));
     document.querySelector('.order').addEventListener('click', this.order.bind(this));
   }
-  // Function for save our cart at local storage
-  saveCart() {
-    localStorage.setItem('cart', JSON.stringify(this.cart));
-  }
-  // Update badge
-  updateBadge() {
-    document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
-  }
   // Rendering cart
   async renderCart() {
     this.updateCart();
@@ -36,10 +27,10 @@ class Cart {
         </div>
         <hr/>`;
     // Render product list in cart
-    for (const productId in this.cart) {
-      const product = await this.productsService.getProductById(productId);
+    for (const id in this.cart) {
+      const product = await this.productsService.getProductById(id);
       cartDomString += this.createCartProductDomString(product);
-      total += await product.price * await this.cart[productId];
+      total += await product.price * await this.cart[id];
     }
     // Render footer total
     cartDomString += `
@@ -65,6 +56,18 @@ class Cart {
             )
     );
   }
+  // Function for save our cart at local storage
+  saveCart() {
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+  // Update badge
+  updateBadge() {
+    document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
+  }
+  // Updating cart from existing storage
+  updateCart() {
+    this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
+  }
   // Make product row in cart
   createCartProductDomString(product) {
     return `
@@ -77,17 +80,16 @@ class Cart {
         </div>
         <hr/>`;
   }
-  // Change products quantity function (increment or decrement)
-  changeQuantity(ev, operation) {
-    const id = ev.target.dataset.id;
-    operation.call(this, id);
-    this.renderCart();
-  }
   addProduct(id) {
     this.cart[id] = (this.cart[id] || 0) + 1;
     this.saveCart();
     this.updateBadge();
-    this.updateCart();
+  }
+   // Change products quantity function (increment or decrement)
+  changeQuantity(ev, operation) {
+    const id = ev.target.dataset.id;
+    operation.call(this, id);
+    this.renderCart();
   }
   deleteProduct(id) {
     if (this.cart[id] > 1) {
@@ -98,10 +100,6 @@ class Cart {
     this.saveCart();
     this.updateBadge();
     this.updateCart();
-  }
-  // Updating cart from existing storage
-  updateCart() {
-    this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
   }
   // Make order
   async order(event) {

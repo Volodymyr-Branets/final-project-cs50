@@ -1,5 +1,5 @@
 // Make products list for Home page
-class ProductListHome {
+class ProductList {
     constructor() {
         this.container = document.querySelector('.products-container');
         this.productsService = new ProductsService();
@@ -34,7 +34,7 @@ class ProductListHome {
                 </article>`;
     }
     // Add listeners
-    addEventListeners() {
+    async addEventListeners() {
         document.querySelectorAll('#btn-info').forEach(btn => {
             btn.addEventListener('click', this.showProductInfo.bind(this));
         });
@@ -62,4 +62,4 @@ class ProductListHome {
         window.showAlert("Thanks! Go to cart and make order.");
     }
 }
-new ProductListHome();
+new ProductList();
