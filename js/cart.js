@@ -9,14 +9,6 @@ class Cart {
     this.renderCart();
     return Cart._instance;
   }
-  // Updating cart from existing storage
-  updateCart() {
-    this.cart = JSON.parse(localStorage.getItem("cart") || "{}");
-  }
-  // Function for save our cart at local storage
-  saveCart() {
-    localStorage.setItem("cart", JSON.stringify(this.cart));
-  }
   // Function for listen
   addEventListeners() {
     document
@@ -27,53 +19,6 @@ class Cart {
       .addEventListener("click", this.order.bind(this));
     this.saveCart();
     this.updateCart();
-  }
-  // Update badge
-  updateBadge() {
-    document.querySelector(".cart-badge").innerHTML = Object.keys(
-      this.cart
-    ).length;
-  }
-  // Make product row in cart
-  createCartProductDomString(product) {
-    this.updateCart();
-    return `
-        <div class="row" data-id="${product.id}">
-            <div class="col-5">${product.title}</div>
-            <div class="col-3">${product.price}</div>
-            <div class="col-2">${this.cart[product.id]}</div>
-            <div class="col-1"><button data-id=${
-              product.id
-            } class="btn btn-sm plus">+</button></div>
-            <div class="col-1"><button data-id=${
-              product.id
-            } class="btn btn-sm minus">-</button></div>
-        </div>
-        <hr/>`;
-  }
-  async addProduct(id) {
-    this.cart[id] = (this.cart[id] || 0) + 1;
-    this.saveCart();
-    this.updateCart();
-    this.updateBadge();
-    this.renderCart();
-  }
-  // Change products quantity function (increment or decrement)
-  changeQuantity(ev, operation) {
-    const id = ev.target.dataset.id;
-    operation.call(this, id);
-    this.saveCart();
-    this.updateCart();
-  }
-  deleteProduct(id) {
-    if (this.cart[id] > 1) {
-      this.cart[id] -= 1;
-    } else {
-      delete this.cart[id];
-    }
-    this.saveCart();
-    this.updateCart();
-    this.updateBadge();
   }
   // Rendering cart
   async renderCart() {
@@ -116,6 +61,58 @@ class Cart {
           this.changeQuantity(ev, this.deleteProduct)
         )
       );
+  }
+  // Change products quantity function (increment or decrement)
+  changeQuantity(ev, operation) {
+    const id = ev.target.dataset.id;
+    operation.call(this, id);
+    this.renderCart();
+  }
+  deleteProduct(id) {
+    if (this.cart[id] > 1) {
+      this.cart[id] -= 1;
+    } else {
+      delete this.cart[id];
+    }
+    this.saveCart();
+    this.updateBadge();
+  }
+  // Make product row in cart
+  createCartProductDomString(product) {
+    this.updateCart();
+    return `
+        <div class="row" data-id="${product.id}">
+            <div class="col-5">${product.title}</div>
+            <div class="col-3">${product.price}</div>
+            <div class="col-2">${this.cart[product.id]}</div>
+            <div class="col-1"><button data-id=${
+              product.id
+            } class="btn btn-sm plus">+</button></div>
+            <div class="col-1"><button data-id=${
+              product.id
+            } class="btn btn-sm minus">-</button></div>
+        </div>
+        <hr/>`;
+  }
+  // Adding product to cart
+  addProduct(id) {
+    this.cart[id] = this.cart[id] ? this.cart[id] + 1 : 1;
+    this.saveCart();
+    this.updateBadge();
+  }
+  // Function for save our cart at local storage
+  saveCart() {
+    localStorage.setItem("cart", JSON.stringify(this.cart));
+  }
+  // Update badge
+  updateBadge() {
+    document.querySelector(".cart-badge").innerHTML = Object.keys(
+      this.cart
+    ).length;
+  }
+  // Updating cart from existing storage
+  updateCart() {
+    this.cart = JSON.parse(localStorage.getItem("cart") || "{}");
   }
   // Make order
   async order(event) {
