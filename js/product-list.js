@@ -1,9 +1,11 @@
+// Make all products list
 class ProductList {
     constructor() {
         this.container = document.querySelector('.products-container');
         this.productsService = new ProductsService();
         this.renderProducts();
     }
+    // Render products
     async renderProducts() {
         let productListDomString = '';
         const products = await this.productsService.getProducts();
@@ -13,6 +15,7 @@ class ProductList {
         this.container.innerHTML = productListDomString;
         this.addEventListeners();
     }
+    // Create product card
     createProductDomString(product) {
         return `<article class="card col-12 col-sm-6 col-md-4 col-lg-3 bg-dark text-light">
                     <img src="img/${product.image}" class="rounded card-img-top m-1" alt="${product.title}">
@@ -24,6 +27,7 @@ class ProductList {
                     </div>
                 </article>`;
     }
+    // Add listeners
     addEventListeners() {
         document.querySelectorAll('#btn-info').forEach(btn => {
             btn.addEventListener('click', this.showProductInfo.bind(this));
@@ -32,6 +36,7 @@ class ProductList {
             btn.addEventListener('click', this.addProductToCart.bind(this));
         });
     }
+     // Create modal window for product
     async showProductInfo(event) {
         const id = event.target.dataset.id;
         const product = await this.productsService.getProductById(id);
@@ -42,10 +47,13 @@ class ProductList {
         modal.querySelector('.product-price').innerHTML = `$${ product.price }`;
         modal.querySelector('#btn-buy').dataset.id = product.id;
     }
+    // Function for add product to cart
     addProductToCart(event) {
         const id = event.target.dataset.id;
         const cart = new Cart();
         cart.addProduct(id);
+        cart.updateCart();
+        window.showAlert("Thanks! Go to cart and make order.");
     }
 }
 new ProductList();

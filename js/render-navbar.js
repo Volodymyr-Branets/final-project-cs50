@@ -1,3 +1,4 @@
+// Template for render navbar on all pages
 const head = document.querySelector('#head');
 
 let navbar = `

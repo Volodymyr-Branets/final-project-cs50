@@ -1,9 +1,11 @@
-class ProductList {
+// Make products list for Home page
+class ProductListHome {
     constructor() {
         this.container = document.querySelector('.products-container');
         this.productsService = new ProductsService();
         this.renderProducts();
     }
+    // Render 4 products in random order
     async renderProducts() {
         let productListDomString = '';
         const products = await this.productsService.getProducts();
@@ -13,16 +15,13 @@ class ProductList {
             while (idList.includes(randomIndex)){
                 randomIndex = Math.floor(Math.random() * 8) + 1;
             }
-
             idList.push(randomIndex);
             productListDomString += this.createProductDomString(products[randomIndex]);
             }
-        // products.some(product => {
-        //     productListDomString += this.createProductDomString(product);
-        // });
         this.container.innerHTML = productListDomString;
         this.addEventListeners();
     }
+    // Create product card
     createProductDomString(product) {
         return `<article class="card col-12 col-sm-6 col-md-4 col-lg-3 bg-dark text-light">
                     <img src="img/${product.image}" class="rounded card-img-top m-1" alt="${product.title}">
@@ -34,6 +33,7 @@ class ProductList {
                     </div>
                 </article>`;
     }
+    // Add listeners
     addEventListeners() {
         document.querySelectorAll('#btn-info').forEach(btn => {
             btn.addEventListener('click', this.showProductInfo.bind(this));
@@ -42,6 +42,7 @@ class ProductList {
             btn.addEventListener('click', this.addProductToCart.bind(this));
         });
     }
+    // Create modal window for product
     async showProductInfo(event) {
         const id = event.target.dataset.id;
         const product = await this.productsService.getProductById(id);
@@ -52,17 +53,13 @@ class ProductList {
         modal.querySelector('.product-price').innerHTML = `$${ product.price }`;
         modal.querySelector('#btn-buy').dataset.id = product.id;
     }
+    // Function for add product to cart
     addProductToCart(event) {
         const id = event.target.dataset.id;
         const cart = new Cart();
         cart.addProduct(id);
         cart.updateCart();
-        window.showAlert("Thanks! Now you can go to the cart.");
+        window.showAlert("Thanks! Go to cart and make order.");
     }
-    // hideProductInfo(event) {
-    //     const id = event.target.dataset.id;
-    //     const modal = document.querySelector('#product-info-modal');
-    //     modal.
-    // }
 }
-new ProductList();
+new ProductListHome();

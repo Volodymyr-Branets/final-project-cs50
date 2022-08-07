@@ -4,6 +4,7 @@ class ArticleList {
         this.articlesService = new ArticlesService();
         this.renderArticles();
     }
+    // Render articles
     async renderArticles() {
         let articleListDomString = '';
         const articles = await this.articlesService.getArticles();
@@ -13,6 +14,7 @@ class ArticleList {
         this.container.innerHTML = articleListDomString;
         this.addEventListeners();
     }
+    // Create card for article
     createArticleDomString(article) {
         return `
                 <div class="col text-dark">
@@ -26,11 +28,13 @@ class ArticleList {
                     </div>
                 </div>`;
     }
+    // Add listeners
     addEventListeners() {
         document.querySelectorAll('.btn-more').forEach(btn => {
             btn.addEventListener('click', this.showArticle.bind(this));
         });
     }
+    // Create modal window for article
     async showArticle(event) {
         const id = event.target.dataset.id;
         const article = await this.articlesService.getArticleById(id);

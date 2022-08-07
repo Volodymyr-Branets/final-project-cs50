@@ -1,3 +1,4 @@
+// Show alertings on pages
 function showAlert(message, success = true) {
   document.querySelector(".alert-container").innerHTML = `<div class="alert ${
     success ? "alert-success" : "alert-danger"

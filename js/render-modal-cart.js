@@ -1,3 +1,4 @@
+// Template for render cart modal window on all pages
 const cartModal = document.querySelector('#cart-modal');
 
 let modal = `
