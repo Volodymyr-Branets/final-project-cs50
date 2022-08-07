@@ -121,7 +121,6 @@ class Cart {
       totalAmount += product.price * this.cart[id];
     }
     orderList += `Total amount: $${totalAmount}`;
-    console.log(orderList);
     const form = document.querySelector(".form-contacts");
     if (form.checkValidity()) {
       const data = new FormData();
