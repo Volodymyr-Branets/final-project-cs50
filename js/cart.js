@@ -5,7 +5,6 @@ class Cart {
     this.container = document.querySelector('.cart-container');
     this.productsService = new ProductsService();
     this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
-    console.log(this.cart);
     this.addEventListeners();
     this.updateBadge();
     this.renderCart();
@@ -18,12 +17,11 @@ class Cart {
   }
   // Function for save our cart at local storage
   saveCart() {
-      //update this.card
     localStorage.setItem('cart', JSON.stringify(this.cart));
   }
   // Update badge
   updateBadge() {
-      document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
+    document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
   }
   // Rendering cart
   async renderCart() {
@@ -51,6 +49,7 @@ class Cart {
     </div>`;
     
     this.container.innerHTML = cartDomString;
+    // Change products quantity buttons
     this.container
         .querySelectorAll(".plus")
         .forEach((el) =>
@@ -68,21 +67,21 @@ class Cart {
   }
   // Make product row in cart
   createCartProductDomString(product) {
-      return `
-          <div class="row" data-id="${product.id}">
-              <div class="col-5">${product.title}</div>
-              <div class="col-3">${product.price}</div>
-              <div class="col-2">${this.cart[product.id]}</div>
-              <div class="col-1"><button data-id=${product.id} class="btn btn-sm plus">+</button></div>
-              <div class="col-1"><button data-id=${product.id} class="btn btn-sm minus">-</button></div>
-          </div>
-          <hr/>`;
+    return `
+        <div class="row" data-id="${product.id}">
+            <div class="col-5">${product.title}</div>
+            <div class="col-3">${product.price}</div>
+            <div class="col-2">${this.cart[product.id]}</div>
+            <div class="col-1"><button data-id=${product.id} class="btn btn-sm plus">+</button></div>
+            <div class="col-1"><button data-id=${product.id} class="btn btn-sm minus">-</button></div>
+        </div>
+        <hr/>`;
   }
-  // Change quantity of cart item (increment or decrement)
+  // Change products quantity function (increment or decrement)
   changeQuantity(ev, operation) {
-      const id = ev.target.dataset.id;
-      operation.call(this, id);
-      this.renderCart();
+    const id = ev.target.dataset.id;
+    operation.call(this, id);
+    this.renderCart();
   }
   addProduct(id) {
     this.cart[id] = (this.cart[id] || 0) + 1;
@@ -91,33 +90,46 @@ class Cart {
     this.updateCart();
   }
   deleteProduct(id) {
-      if (this.cart[id] > 1) {
-      this.cart[id] -= 1;
-      } else {
-      delete this.cart[id];
-      }
-      this.saveCart();
-      this.updateBadge();
+    if (this.cart[id] > 1) {
+    this.cart[id] -= 1;
+    } else {
+    delete this.cart[id];
+    }
+    this.saveCart();
+    this.updateBadge();
+    this.updateCart();
   }
   // Updating cart from existing storage
   updateCart() {
     this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
   }
   // Make order
-  async order(ev) {
+  async order(event) {
     // Check if cart is empty
     if (Object.keys(this.cart).length === 0) {
       window.showAlert("Please choose products to order", false);
       return;
     }
-    // 
+    // Render order message
+    let orderList = '';
+    let listNumber = 1;
+    let totalAmount = 0;
+    for (const id in this.cart) {
+      const product = await this.productsService.getProductById(id);
+      orderList += `${listNumber}. ${product.title} ($${product.price}/piece) - ${this.cart[id]} pieces - $${product.price * this.cart[id]} total\n`;
+      listNumber++;
+      totalAmount += product.price * this.cart[id];
+    }
+    orderList += `Total amount: $${totalAmount}`;
+    console.log(orderList);
     const form = document.querySelector(".form-contacts");
     if (form.checkValidity()) {
       const data = new FormData();
-      data.append("cart", JSON.stringify(this.cart));
-      data.append("name", form.querySelector("input[name=name]").value);
-      data.append("email", form.querySelector("input[name=email]").value);
-      ev.preventDefault();
+      data.append("Order", orderList);
+      data.append("Client name", form.querySelector("input[name=name]").value);
+      data.append("Client phone number", form.querySelector("input[name=phone]").value);
+      data.append("Client email", form.querySelector("input[name=email]").value);
+      event.preventDefault();
       fetch("https://formspree.io/f/xdojnkvy", {
         method: "POST",
         headers: {
@@ -127,7 +139,7 @@ class Cart {
       })
         .then((response) => {
           if (response.status === 200) {
-            // return response.text();
+            return response.text();
           } else {
             throw new Error("Cannot send form");
           }
@@ -138,7 +150,7 @@ class Cart {
           this.saveCart();
           this.updateBadge();
           this.renderCart();
-          window.showAlert("Thank you! " + responseText);
+          window.showAlert("Thanks for your order! We will call you soon.");
           document.querySelector("#modal-cart .close-btn").click();
         })
         .catch((error) =>

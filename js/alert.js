@@ -6,5 +6,5 @@ function showAlert(message, success = true) {
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
      </div>`;
   const bsAlert = new bootstrap.Alert(document.querySelector(".alert"));
-  setTimeout(() => bsAlert.close(), 2000);
+  setTimeout(() => bsAlert.close(), 3500);
 }
