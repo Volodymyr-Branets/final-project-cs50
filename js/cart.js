@@ -3,7 +3,7 @@ class Cart {
     if (!Cart._instance) Cart._instance = this;
     this.container = document.querySelector('.cart-container');
     this.productsService = new ProductsService();
-    this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
+    this.updateCart();
     this.addEventListeners();
     this.updateBadge();
     this.renderCart();
