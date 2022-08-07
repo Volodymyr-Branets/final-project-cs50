@@ -20,7 +20,7 @@ let modal = `
                         </div>
                         <div class="form-group row">
                             <label for="client-phone" class="col-4 col-form-label">Your phone:</label>
-                            <input class="form-control col-8" type="tel" id="client-phone" name="phone" pattern="+380[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}" required>
+                            <input class="form-control col-8" type="tel" id="client-phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
                         </div>
                         <div class="form-group row">
                             <label for="client-email" class="col-4 col-form-label">Your email:</label>

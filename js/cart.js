@@ -1,7 +1,7 @@
 class Cart {
   constructor() {
     if (!Cart._instance) Cart._instance = this;
-    this.container = document.querySelector('.cart-container');
+    this.container = document.querySelector(".cart-container");
     this.productsService = new ProductsService();
     this.updateCart();
     this.addEventListeners();
@@ -9,10 +9,71 @@ class Cart {
     this.renderCart();
     return Cart._instance;
   }
+  // Updating cart from existing storage
+  updateCart() {
+    this.cart = JSON.parse(localStorage.getItem("cart") || "{}");
+  }
+  // Function for save our cart at local storage
+  saveCart() {
+    localStorage.setItem("cart", JSON.stringify(this.cart));
+  }
   // Function for listen
   addEventListeners() {
-    document.querySelector('.cart').addEventListener('click', this.renderCart.bind(this));
-    document.querySelector('.order').addEventListener('click', this.order.bind(this));
+    document
+      .querySelector(".cart")
+      .addEventListener("click", this.renderCart.bind(this));
+    document
+      .querySelector(".order")
+      .addEventListener("click", this.order.bind(this));
+    this.saveCart();
+    this.updateCart();
+  }
+  // Update badge
+  updateBadge() {
+    document.querySelector(".cart-badge").innerHTML = Object.keys(
+      this.cart
+    ).length;
+  }
+  // Make product row in cart
+  createCartProductDomString(product) {
+    this.updateCart();
+    return `
+        <div class="row" data-id="${product.id}">
+            <div class="col-5">${product.title}</div>
+            <div class="col-3">${product.price}</div>
+            <div class="col-2">${this.cart[product.id]}</div>
+            <div class="col-1"><button data-id=${
+              product.id
+            } class="btn btn-sm plus">+</button></div>
+            <div class="col-1"><button data-id=${
+              product.id
+            } class="btn btn-sm minus">-</button></div>
+        </div>
+        <hr/>`;
+  }
+  async addProduct(id) {
+    this.cart[id] = (this.cart[id] || 0) + 1;
+    this.saveCart();
+    this.updateCart();
+    this.updateBadge();
+    this.renderCart();
+  }
+  // Change products quantity function (increment or decrement)
+  changeQuantity(ev, operation) {
+    const id = ev.target.dataset.id;
+    operation.call(this, id);
+    this.saveCart();
+    this.updateCart();
+  }
+  deleteProduct(id) {
+    if (this.cart[id] > 1) {
+      this.cart[id] -= 1;
+    } else {
+      delete this.cart[id];
+    }
+    this.saveCart();
+    this.updateCart();
+    this.updateBadge();
   }
   // Rendering cart
   async renderCart() {
@@ -30,7 +91,7 @@ class Cart {
     for (const id in this.cart) {
       const product = await this.productsService.getProductById(id);
       cartDomString += this.createCartProductDomString(product);
-      total += await product.price * await this.cart[id];
+      total += (await product.price) * (await this.cart[id]);
     }
     // Render footer total
     cartDomString += `
@@ -38,68 +99,23 @@ class Cart {
         <div class="col-5"><strong>TOTAL</strong></div>
         <div class="col-3"><strong>$${total.toFixed(2)}</strong></div>
     </div>`;
-    
+
     this.container.innerHTML = cartDomString;
     // Change products quantity buttons
     this.container
-        .querySelectorAll(".plus")
-        .forEach((el) =>
-            el.addEventListener("click", (ev) =>
-                this.changeQuantity(ev, this.addProduct)
-            )
-    );
+      .querySelectorAll(".plus")
+      .forEach((el) =>
+        el.addEventListener("click", (ev) =>
+          this.changeQuantity(ev, this.addProduct)
+        )
+      );
     this.container
-        .querySelectorAll(".minus")
-        .forEach((el) =>
-            el.addEventListener("click", (ev) =>
-                this.changeQuantity(ev, this.deleteProduct)
-            )
-    );
-  }
-  // Function for save our cart at local storage
-  saveCart() {
-    localStorage.setItem('cart', JSON.stringify(this.cart));
-  }
-  // Update badge
-  updateBadge() {
-    document.querySelector('.cart-badge').innerHTML = Object.keys(this.cart).length;
-  }
-  // Updating cart from existing storage
-  updateCart() {
-    this.cart = JSON.parse(localStorage.getItem('cart') || '{}');
-  }
-  // Make product row in cart
-  createCartProductDomString(product) {
-    return `
-        <div class="row" data-id="${product.id}">
-            <div class="col-5">${product.title}</div>
-            <div class="col-3">${product.price}</div>
-            <div class="col-2">${this.cart[product.id]}</div>
-            <div class="col-1"><button data-id=${product.id} class="btn btn-sm plus">+</button></div>
-            <div class="col-1"><button data-id=${product.id} class="btn btn-sm minus">-</button></div>
-        </div>
-        <hr/>`;
-  }
-  addProduct(id) {
-    this.cart[id] = (this.cart[id] || 0) + 1;
-    this.saveCart();
-    this.updateBadge();
-  }
-   // Change products quantity function (increment or decrement)
-  changeQuantity(ev, operation) {
-    const id = ev.target.dataset.id;
-    operation.call(this, id);
-    this.renderCart();
-  }
-  deleteProduct(id) {
-    if (this.cart[id] > 1) {
-    this.cart[id] -= 1;
-    } else {
-    delete this.cart[id];
-    }
-    this.saveCart();
-    this.updateBadge();
-    this.updateCart();
+      .querySelectorAll(".minus")
+      .forEach((el) =>
+        el.addEventListener("click", (ev) =>
+          this.changeQuantity(ev, this.deleteProduct)
+        )
+      );
   }
   // Make order
   async order(event) {
@@ -109,12 +125,16 @@ class Cart {
       return;
     }
     // Render order message
-    let orderList = '';
+    let orderList = "";
     let listNumber = 1;
     let totalAmount = 0;
     for (const id in this.cart) {
       const product = await this.productsService.getProductById(id);
-      orderList += `${listNumber}. ${product.title} ($${product.price}/piece) - ${this.cart[id]} pieces - $${product.price * this.cart[id]} total\n`;
+      orderList += `${listNumber}. ${product.title} ($${
+        product.price
+      }/piece) - ${this.cart[id]} pieces - $${
+        product.price * this.cart[id]
+      } total\n`;
       listNumber++;
       totalAmount += product.price * this.cart[id];
     }
@@ -124,15 +144,21 @@ class Cart {
       const data = new FormData();
       data.append("Order", orderList);
       data.append("Client name", form.querySelector("input[name=name]").value);
-      data.append("Client phone number", form.querySelector("input[name=phone]").value);
-      data.append("Client email", form.querySelector("input[name=email]").value);
+      data.append(
+        "Client phone number",
+        form.querySelector("input[name=phone]").value
+      );
+      data.append(
+        "Client email",
+        form.querySelector("input[name=email]").value
+      );
       event.preventDefault();
       fetch("https://formspree.io/f/xdojnkvy", {
         method: "POST",
         headers: {
           Accept: "application/json",
         },
-        body: data
+        body: data,
       })
         .then((response) => {
           if (response.status === 200) {
