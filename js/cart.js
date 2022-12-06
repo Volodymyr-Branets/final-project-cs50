@@ -35,8 +35,8 @@ class Cart {
     // Render product list in cart
     for (const id in this.cart) {
       const product = await this.productsService.getProductById(id);
-      total += product.price * this.cart[id];
       cartDomString += this.createCartProductDomString(product);
+      total += product.price * this.cart[id];
     }
     // Render footer total
     cartDomString += `
